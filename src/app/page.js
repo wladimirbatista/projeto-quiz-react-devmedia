@@ -1,95 +1,100 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import Login from '../components/Login'
+import ContadorQuestoes from "../components/ContadorQuestoes";
+import Botao from "../components/Botao";
+import Quiz from "../components/Quiz";
+import Resultado from '../components/Resultado'
+import styles from '../styles/page.module.css'
+
+import { useState } from "react";
+
+import {
+  selecionarPerguntaAleatoria,
+  embaralharOpcoesPergunta,
+  encontrarOpcaoResposta,
+  calcularPorcentagemAcertos,
+} from '../utils';
 
 export default function Home() {
+
+  const quantidadeQuestoes = 10;
+
+  const [iniciarJogo, setIniciarJogo] = useState(false);
+  const [perguntasSelecionadas, setPerguntasSelecionadas] = useState([]);
+  const [respostaUsuario, setRespostaUsuario] = useState(null);
+  const [contadorQuestoes, setContadorQuestoes] = useState(0);
+  const [indicePerguntaAtual, setIndicePerguntaAtual] = useState(0);
+  const [respostasCorretas, setRespostasCorretas] = useState(0);
+  const [porcentagemAcertos, setPorcentagemAcertos] = useState(0);
+
+  const handleIniciarJogo = () => {
+    const perguntaAleatoria = selecionarPerguntaAleatoria();
+    const perguntaOpcoesEmbaralhadas = embaralharOpcoesPergunta(perguntaAleatoria);
+    
+    setPerguntasSelecionadas(perguntaOpcoesEmbaralhadas);
+    setIniciarJogo(true);
+  }
+
+  const handleCliqueResposta = (opcaoSelecionada) => {
+    const opcoesPerguntaAtual = perguntasSelecionadas[0].opcoes;
+    const opcaoSelecionadaCorreta = encontrarOpcaoResposta(opcoesPerguntaAtual, opcaoSelecionada);
+
+    setRespostaUsuario(opcaoSelecionadaCorreta);
+    
+    if (opcaoSelecionadaCorreta.correta) {
+      setRespostasCorretas(respostasCorretas + 1);
+      setPorcentagemAcertos(calcularPorcentagemAcertos(respostasCorretas + 1, quantidadeQuestoes));
+    }
+  };
+
+  const handleProximaPergunta = () => {
+    if (indicePerguntaAtual < quantidadeQuestoes) { // verificar se há mais perguntas antes de incrementar o contador
+      const proximaPerguntaAleatorio = selecionarPerguntaAleatoria();
+      const proximaPerguntaOpcoesEmbaralhadas = embaralharOpcoesPergunta(proximaPerguntaAleatorio)
+
+      setPerguntasSelecionadas(proximaPerguntaOpcoesEmbaralhadas);
+      setIndicePerguntaAtual(indicePerguntaAtual + 1);
+      setRespostaUsuario(null);
+      setContadorQuestoes(contadorQuestoes + 1);
+    }
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+    <>
+      {!iniciarJogo ? (
+        <Login 
+          handleIniciarJogo={handleIniciarJogo}
         />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+      ) : (
+        <>
+          {indicePerguntaAtual < quantidadeQuestoes && (
+            <div className={styles.container_quiz}>
+              <ContadorQuestoes 
+                contadorQuestoes={contadorQuestoes}
+                quantidadeQuestoes={quantidadeQuestoes}
+              />
+              <Quiz 
+                pergunta={perguntasSelecionadas[0].pergunta}
+                opcoes={perguntasSelecionadas[0].opcoes}
+                handleCliqueResposta={handleCliqueResposta}
+                respostaUsuario={respostaUsuario}
+              />
+              <Botao 
+                handleProximaPergunta={handleProximaPergunta}
+                respostaUsuario={respostaUsuario}
+                indicePerguntaAtual={indicePerguntaAtual}
+                quantidadeQuestoes={quantidadeQuestoes}
+              />
+            </div>
+          )}
+          {indicePerguntaAtual === quantidadeQuestoes && (
+            <Resultado 
+              porcentagem={porcentagemAcertos}
+              respostasCorretas={respostasCorretas}
+            />
+          )}
+        </>
+      )}
+    </>
+  )
 }

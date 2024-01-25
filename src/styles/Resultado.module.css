@@ -1,0 +1,59 @@
+.container_resultado{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 40px 20px;
+  width: 100%;
+  max-width: 768px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+}
+
+.container_resultado h4 {
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+.container_msgFimJogo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  text-align: center;
+}
+
+.container_msgFimJogo div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container_btn {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.btn_link {
+  width: 100%;
+  padding: 5px 10px;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 16px;
+  border: 0;
+  border-radius: 4px;
+  color: black;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn_link:nth-child(1) {
+  background-color: greenyellow;
+}
+
+.btn_link:nth-child(2) {
+  background-color: red;
+}

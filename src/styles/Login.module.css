@@ -1,0 +1,35 @@
+.container_login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  max-width: 525px;
+  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+}
+
+.container_login h2 {
+  color: white;
+  font-size: 24px;
+  text-align: center;
+}
+
+.container_login div {
+  width: 100%;
+  display: flex;
+}
+.container_login div button {
+  width: 100%;
+  border: 0;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  color: black;
+  background-color: greenyellow;
+}
+

@@ -1,0 +1,14 @@
+.container_contador {
+  width: 100%;
+  padding: 5px;
+  background-color: whitesmoke;
+  border: 1px solid whitesmoke;
+  border-radius: 8px;
+}
+
+.container_contador p {
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+  text-align: center;
+}
