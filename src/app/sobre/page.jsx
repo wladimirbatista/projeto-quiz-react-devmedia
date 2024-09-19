@@ -11,7 +11,7 @@ const Sobre = () => {
           <Image src={Perfil} alt="perfil" width={100} height={100} />
         </figure>
         <div>
-          <span>nome do desenvolvedor</span>
+          <span>Nome: Fulano</span>
         </div>
       </div>
 
